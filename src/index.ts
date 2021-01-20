@@ -2,8 +2,6 @@ const prompts = require('prompts');
 const { exec, execSync, spawn } = require('child_process');
 const ora = require('ora');
 
-const cloudSqlProxyPath = "/Users/vitor/cloud_sql_proxy";
-
 interface Project {
   name: string;
   projectId: string;
@@ -97,7 +95,7 @@ function startProxy(instance: Instance, port: string) {
 
   console.log("Running command: gcloud", args)
 
-  const child = spawn(cloudSqlProxyPath, [args]);
+  const child = spawn('cloud_sql_proxy', [args]);
 
   // use child.stdout.setEncoding('utf8'); if you want text chunks
   child.stderr.on('data', (chunk: Buffer) => {
