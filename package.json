@@ -2,13 +2,16 @@
   "name": "csqlp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare" : "npm run build"
   },
   "author": "",
   "license": "ISC",
+  "files": ["lib/**/*"],
   "devDependencies": {
     "@types/prompts": "^2.0.9",
     "typescript": "^4.1.3"
