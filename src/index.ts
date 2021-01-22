@@ -1,5 +1,5 @@
 const prompts = require('prompts');
-const { exec, execSync, spawn } = require('child_process');
+const { exec, spawn } = require('child_process');
 const ora = require('ora');
 
 interface Project {
@@ -14,6 +14,8 @@ interface Instance {
 }
 
 (async () => {
+
+  console.log('Cloud SQL Proxy (csqlp)')
 
   try {
     // Fetch list of projects
