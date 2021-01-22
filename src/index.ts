@@ -20,6 +20,8 @@ interface Instance {
   console.log('Cloud SQL Proxy (csqlp)')
 
   try {
+    await checkDependencies()
+
     // Fetch list of projects
     const projects = await fetchProjects()
 
@@ -49,7 +51,7 @@ interface Instance {
 
 async function fetchProjects(): Promise<Project[]> {
   const spinner = ora('Fetching projects').start();
-  const response = await commandExec(`gcloud projects list --format=json`);
+  const response = await cmdExec(`gcloud projects list --format=json`);
   spinner.stop();
 
   return JSON.parse(response)
@@ -57,7 +59,7 @@ async function fetchProjects(): Promise<Project[]> {
 
 async function fetchInstances(project: Project): Promise<Instance[]> {
   const spinner = ora('Fetching instances').start();
-  const response = await commandExec(`gcloud sql instances list --project=${project.projectId} --format=json`);
+  const response = await cmdExec(`gcloud sql instances list --project=${project.projectId} --format=json`);
   spinner.stop();
 
   return JSON.parse(response)
@@ -128,7 +130,19 @@ function startProxy(instance: Instance, port: string) {
   });
 }
 
-async function commandExec(command: string): Promise<string> {
+async function checkDependencies(): Promise<boolean> {
+  if (await cmdFindPath('gcloud') === "") {
+    throw "Error: Could not find gcloud cli. Make sure gcloud is installed and available on your PATH before running csqlp. Find more at https://cloud.google.com/sdk/gcloud"
+  }
+
+  if (await cmdFindPath('cloud_sql_proxy') === "") {
+    throw "Error: Could not find cloud_sql_proxy. Make sure cloud_sql_proxy is installed and available on your PATH before running csqlp. Find more at https://cloud.google.com/sql/docs/mysql/connect-admin-proxy"
+  }
+
+  return true
+}
+
+async function cmdExec(command: string): Promise<string> {
   return new Promise((resolve, reject) => {
     exec(command, (err: Error, stdout: string, stderr: string) => {
       if (err) {
@@ -136,6 +150,18 @@ async function commandExec(command: string): Promise<string> {
       }
 
       resolve(stdout)
+    });
+  })
+}
+
+async function cmdFindPath(command: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    exec(`command -v ${command}`, (err: Error, stdout: string, stderr: string) => {
+      if (err) {
+        resolve("")
+      } else {
+        resolve(stdout)
+      }
     });
   })
 }
