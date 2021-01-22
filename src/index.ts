@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const prompts = require('prompts');
 const { exec, spawn } = require('child_process');
 const ora = require('ora');
