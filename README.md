@@ -3,6 +3,8 @@
 Command line tool to simplify using [Google's Cloud SQL Proxy](https://cloud.google.com/sql/docs/mysql/connect-admin-proxy). It leverages Google Cloud SDK + Cloud SQL Proxy to fetch projects and instances from GCP and make 
 starting a proxy as easy as you expect it to be.
 
+![render1612256859343](https://user-images.githubusercontent.com/15667446/106577455-25595300-651d-11eb-838d-13614715814f.gif)
+
 ## Usage
 
 Before using `csqlp`, make sure you have:
